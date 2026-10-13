@@ -1,0 +1,77 @@
+<?php
+
+namespace Database\Seeders;
+
+// DIHASILKAN dari master data frontend (38 provinsi, 25 komoditas). Koordinat = titik pusat provinsi (perkiraan).
+// safe_stock = angka simulasi, ganti dengan data resmi lewat menu Master Data.
+class MasterData
+{
+    public const WILAYAH = [
+        ['Aceh', 'Aceh', 4.6951, 96.7494],
+        ['Sumatera Utara', 'Sumatera Utara', 2.1154, 99.5451],
+        ['Sumatera Barat', 'Sumatera Barat', -0.7399, 100.8],
+        ['Riau', 'Riau', 0.2933, 101.7068],
+        ['Jambi', 'Jambi', -1.4852, 102.4381],
+        ['Sumatera Selatan', 'Sumatera Selatan', -3.3194, 103.9144],
+        ['Bengkulu', 'Bengkulu', -3.7928, 102.2608],
+        ['Lampung', 'Lampung', -4.5586, 105.4068],
+        ['Kepulauan Bangka Belitung', 'Kepulauan Bangka Belitung', -2.7411, 106.4406],
+        ['Kepulauan Riau', 'Kepulauan Riau', 3.9457, 108.1429],
+        ['DKI Jakarta', 'DKI Jakarta', -6.2088, 106.8456],
+        ['Jawa Barat', 'Jawa Barat', -6.9147, 107.6098],
+        ['Jawa Tengah', 'Jawa Tengah', -7.1508, 110.1403],
+        ['DI Yogyakarta', 'DI Yogyakarta', -7.7956, 110.3695],
+        ['Jawa Timur', 'Jawa Timur', -7.5361, 112.2384],
+        ['Banten', 'Banten', -6.4058, 106.064],
+        ['Bali', 'Bali', -8.4095, 115.1889],
+        ['Nusa Tenggara Barat', 'Nusa Tenggara Barat', -8.6529, 117.3616],
+        ['Nusa Tenggara Timur', 'Nusa Tenggara Timur', -8.6574, 121.0794],
+        ['Kalimantan Barat', 'Kalimantan Barat', -0.2787, 111.4753],
+        ['Kalimantan Tengah', 'Kalimantan Tengah', -1.6815, 113.3824],
+        ['Kalimantan Selatan', 'Kalimantan Selatan', -3.0926, 115.2838],
+        ['Kalimantan Timur', 'Kalimantan Timur', 0.5387, 116.4194],
+        ['Kalimantan Utara', 'Kalimantan Utara', 3.0731, 116.0414],
+        ['Sulawesi Utara', 'Sulawesi Utara', 1.4748, 124.8421],
+        ['Sulawesi Tengah', 'Sulawesi Tengah', -1.43, 121.4456],
+        ['Sulawesi Selatan', 'Sulawesi Selatan', -3.6688, 119.9741],
+        ['Sulawesi Tenggara', 'Sulawesi Tenggara', -4.1449, 122.1746],
+        ['Gorontalo', 'Gorontalo', 0.6999, 122.4467],
+        ['Sulawesi Barat', 'Sulawesi Barat', -2.8441, 119.2321],
+        ['Maluku', 'Maluku', -3.2385, 130.1453],
+        ['Maluku Utara', 'Maluku Utara', 1.5709, 127.8088],
+        ['Papua', 'Papua', -2.5337, 140.7181],
+        ['Papua Barat', 'Papua Barat', -1.3361, 133.1747],
+        ['Papua Barat Daya', 'Papua Barat Daya', -1.0, 131.3],
+        ['Papua Tengah', 'Papua Tengah', -3.6, 136.5],
+        ['Papua Selatan', 'Papua Selatan', -6.9, 139.6],
+        ['Papua Pegunungan', 'Papua Pegunungan', -4.0, 139.0],
+    ];
+
+    public const KOMODITAS = [
+        ['Beras Medium', 'pokok', 'ton', 800],
+        ['Beras Premium', 'pokok', 'ton', 600],
+        ['Jagung Pipilan Kering', 'pokok', 'ton', 400],
+        ['Kedelai Biji Kering', 'pokok', 'ton', 120],
+        ['Tepung Terigu', 'pokok', 'ton', 250],
+        ['Gula Pasir', 'pokok', 'ton', 300],
+        ['Minyak Goreng Curah', 'pokok', 'ton', 150],
+        ['Minyak Goreng Kemasan', 'pokok', 'kuintal', 500],
+        ['Garam Beryodium', 'pokok', 'ton', 60],
+        ['Mi Instan', 'pokok', 'ton', 80],
+        ['Cabai Rawit Merah', 'hortikultura', 'ton', 150],
+        ['Cabai Merah Keriting', 'hortikultura', 'ton', 200],
+        ['Bawang Merah', 'hortikultura', 'ton', 200],
+        ['Bawang Putih', 'hortikultura', 'ton', 120],
+        ['Tomat', 'hortikultura', 'ton', 150],
+        ['Kentang', 'hortikultura', 'ton', 120],
+        ['Kubis', 'hortikultura', 'ton', 130],
+        ['Daging Ayam Ras', 'protein', 'ton', 250],
+        ['Telur Ayam Ras', 'protein', 'ton', 300],
+        ['Daging Sapi', 'protein', 'ton', 90],
+        ['Ikan Kembung', 'protein', 'ton', 100],
+        ['Ikan Tongkol', 'protein', 'ton', 100],
+        ['Tahu', 'protein', 'ton', 60],
+        ['Tempe', 'protein', 'ton', 60],
+        ['Susu Kental Manis', 'lainnya', 'ton', 50],
+    ];
+}

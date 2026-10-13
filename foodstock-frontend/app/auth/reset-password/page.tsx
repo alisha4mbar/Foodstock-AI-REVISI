@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { KeyRound } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { Card, Input, Button } from "@/components/ui/Basics";
+import { Card, PasswordInput, Button } from "@/components/ui/Basics";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -34,8 +34,7 @@ export default function ResetPasswordPage() {
         }}>
           <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
             Password baru
-            <Input 
-              type="password" 
+            <PasswordInput 
               required 
               minLength={8} 
               value={password} 
@@ -45,8 +44,7 @@ export default function ResetPasswordPage() {
           </label>
           <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
             Konfirmasi password
-            <Input 
-              type="password" 
+            <PasswordInput 
               required 
               value={confirm} 
               onChange={(e) => setConfirm(e.target.value)} 

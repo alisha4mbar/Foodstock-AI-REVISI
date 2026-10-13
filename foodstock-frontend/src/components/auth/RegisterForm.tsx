@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { RegisterSchema } from "@/types/domain";
 import { useRegisterMutation } from "@/hooks/useAuth";
-import { Button, FormField, Input } from "@/components/ui/Basics";
+import { Button, FormField, Input, PasswordInput } from "@/components/ui/Basics";
 import { AlertCircle } from "lucide-react";
 
 export function RegisterForm() {
@@ -49,10 +49,10 @@ export function RegisterForm() {
           <Input id="reg-instansi" placeholder="Dinas Ketahanan Pangan Jawa Tengah" value={form.instansi} onChange={(e) => update({ instansi: e.target.value })} />
         </FormField>
         <FormField label="Kata Sandi" htmlFor="reg-password" error={errors.password}>
-          <Input id="reg-password" type="password" value={form.password} onChange={(e) => update({ password: e.target.value })} />
+          <PasswordInput id="reg-password" value={form.password} onChange={(e) => update({ password: e.target.value })} />
         </FormField>
         <FormField label="Konfirmasi Kata Sandi" htmlFor="reg-konfirmasi" error={errors.konfirmasiPassword}>
-          <Input id="reg-konfirmasi" type="password" value={form.konfirmasiPassword} onChange={(e) => update({ konfirmasiPassword: e.target.value })} />
+          <PasswordInput id="reg-konfirmasi" value={form.konfirmasiPassword} onChange={(e) => update({ konfirmasiPassword: e.target.value })} />
         </FormField>
 
         {registerMutation.isError && (

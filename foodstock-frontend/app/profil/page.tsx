@@ -8,7 +8,8 @@ import { useSessionStore } from "@/store/useSessionStore";
 import { changePassword, fetchMe, updateProfile } from "@/services/api";
 import { useWilayahQuery, useKomoditasQuery } from "@/hooks/useQueries";
 import { ROLE_LABEL } from "@/types/domain";
-import { Button, Card, FormField, Input } from "@/components/ui/Basics";
+import { SessionSync } from "@/components/layout/SessionSync";
+import { Button, Card, FormField, Input, PasswordInput } from "@/components/ui/Basics";
 
 const ROLE_HOME: Record<string, string> = { admin: "/admin", dinas: "/dinas", bulog: "/bulog", distributor: "/distributor" };
 
@@ -68,6 +69,7 @@ export default function ProfilPage() {
 
   return (
     <div className="app-shell-bg dash-shell mx-auto min-h-screen max-w-2xl px-5 py-10 text-slate-100">
+      <SessionSync />
       <Link href={ROLE_HOME[user.role] ?? "/"} className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-emerald-400 transition">
         <ArrowLeft className="h-4 w-4" /> Kembali ke Dashboard
       </Link>
@@ -94,10 +96,10 @@ export default function ProfilPage() {
             <Input id="profil-instansi" value={instansi} onChange={(e) => setInstansi(e.target.value)} className="bg-[#051410] border-emerald-900/50 text-white" />
           </FormField>
           <FormField label="Kata Sandi Saat Ini" htmlFor="profil-password-lama" hint="Hanya diisi jika ingin mengganti kata sandi.">
-            <Input id="profil-password-lama" type="password" value={passwordLama} onChange={(e) => setPasswordLama(e.target.value)} placeholder="********" className="bg-[#051410] border-emerald-900/50 text-white placeholder:text-slate-600" />
+            <PasswordInput id="profil-password-lama" value={passwordLama} onChange={(e) => setPasswordLama(e.target.value)} placeholder="********" className="bg-[#051410] border-emerald-900/50 text-white placeholder:text-slate-600" />
           </FormField>
           <FormField label="Kata Sandi Baru" htmlFor="profil-password" hint="Minimal 8 karakter. Kosongkan jika tidak ingin mengubah password.">
-            <Input id="profil-password" type="password" value={passwordBaru} onChange={(e) => setPasswordBaru(e.target.value)} placeholder="********" className="bg-[#051410] border-emerald-900/50 text-white placeholder:text-slate-600" />
+            <PasswordInput id="profil-password" value={passwordBaru} onChange={(e) => setPasswordBaru(e.target.value)} placeholder="********" className="bg-[#051410] border-emerald-900/50 text-white placeholder:text-slate-600" />
           </FormField>
 
           {error && (

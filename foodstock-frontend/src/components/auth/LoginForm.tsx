@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { LoginSchema } from "@/types/domain";
 import { useLoginMutation } from "@/hooks/useAuth";
-import { Button, FormField, Input } from "@/components/ui/Basics";
+import { Button, FormField, Input, PasswordInput } from "@/components/ui/Basics";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 export function LoginForm() {
@@ -50,7 +50,7 @@ export function LoginForm() {
           <Input id="login-email" type="email" placeholder="nama@instansi.go.id" value={email} onChange={(e) => setEmail(e.target.value)} />
         </FormField>
         <FormField label="Kata Sandi" htmlFor="login-password" error={errors.password}>
-          <Input id="login-password" type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput id="login-password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} />
         </FormField>
 
         {loginMutation.isError && (

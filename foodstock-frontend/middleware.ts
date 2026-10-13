@@ -13,6 +13,13 @@ const PROTECTED_PREFIXES = [...Object.values(ROLE_PREFIX), "/profil"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Pengguna yang sudah masuk tidak perlu melihat login/register lagi.
+  if (pathname === "/login" || pathname === "/register") {
+    const active = await verifySession(request.cookies.get(SESSION_COOKIE_NAME)?.value);
+    return active ? NextResponse.redirect(new URL(ROLE_PREFIX[active.role], request.url)) : NextResponse.next();
+  }
+
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
   if (!isProtected) return NextResponse.next();
 
@@ -39,5 +46,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/dinas/:path*", "/bulog/:path*", "/distributor/:path*", "/profil/:path*"],
+  matcher: ["/login", "/register", "/admin/:path*", "/dinas/:path*", "/bulog/:path*", "/distributor/:path*", "/profil/:path*"],
 };

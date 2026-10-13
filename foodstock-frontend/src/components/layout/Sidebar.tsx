@@ -7,6 +7,7 @@ import { ChevronRight, LogOut, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { useUIStore } from "@/store/useUIStore";
 import { useLogout } from "@/hooks/useAuth";
+import { SessionSync } from "@/components/layout/SessionSync";
 import { useSessionStore } from "@/store/useSessionStore";
 import { ROLE_LABEL, type Role } from "@/types/domain";
 
@@ -34,6 +35,7 @@ export function Sidebar({ role, groupLabel, items }: { role: Role; groupLabel: s
 
   return (
     <>
+      <SessionSync />
       {isOpen && (
         <div className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} aria-hidden="true" />
       )}

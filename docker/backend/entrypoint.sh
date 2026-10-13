@@ -16,6 +16,9 @@ until php artisan migrate --force --seed; do
   echo "[foodstock] Menunggu database... ($i)"; sleep 3
 done
 
+# Akun per peran @foodstock.com (opsional; password dari env FOODSTOCK_ROLE_PASSWORD).
+php artisan foodstock:provision-accounts || true
+
 php artisan config:cache >/dev/null 2>&1 || true
 echo "[foodstock] Backend siap di :${PORT:-8000}"
 exec php artisan serve --host=0.0.0.0 --port="${PORT:-8000}"

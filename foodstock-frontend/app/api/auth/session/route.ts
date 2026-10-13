@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE_NAME, TOKEN_COOKIE_NAME, signSession } from "@/lib/session";
+import { SESSION_COOKIE_NAME, TOKEN_COOKIE_NAME, signSession, verifySession } from "@/lib/session";
 import { BACKEND_UNREACHABLE, LARAVEL_API_URL } from "@/lib/laravel";
 import { RoleSchema } from "@/types/domain";
 import { z } from "zod";
@@ -59,6 +59,18 @@ export async function POST(request: Request) {
   res.cookies.set(TOKEN_COOKIE_NAME, token, cookieBase);
   res.cookies.set(SESSION_COOKIE_NAME, await signSession({ ...session, iat: Date.now() }), cookieBase);
   return res;
+}
+
+// Sesi aktif dari cookie bertanda tangan: dipakai dashboard untuk menyelaraskan nama/peran
+// di TopBar/Sidebar dengan sesi server (mis. setelah storage browser dibersihkan).
+export async function GET() {
+  const jar = await cookies();
+  const payload = await verifySession(jar.get(SESSION_COOKIE_NAME)?.value);
+  if (!payload || !jar.get(TOKEN_COOKIE_NAME)?.value) {
+    return NextResponse.json({ code: "UNAUTHENTICATED", message: "Belum masuk.", errors: null }, { status: 401 });
+  }
+  const { userId, nama, role, instansi } = payload;
+  return NextResponse.json({ ok: true, session: { userId, nama, role, instansi } }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function DELETE() {

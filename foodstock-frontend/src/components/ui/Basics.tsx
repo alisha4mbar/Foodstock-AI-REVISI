@@ -1,9 +1,9 @@
 "use client";
 
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from "react";
+import { useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from "react";
 import { type VariantProps } from "class-variance-authority";
 import { badgeVariants, buttonVariants, cardVariants, cn } from "./variants";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export function Button({
   className,
@@ -74,6 +74,26 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
       )}
       {...props}
     />
+  );
+}
+
+/** Input password dengan tombol tampilkan/sembunyikan (ikon mata). */
+export function PasswordInput({ className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "type">) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div className="relative">
+      <Input {...props} type={visible ? "text" : "password"} className={cn("pr-11", className)} />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? "Sembunyikan password" : "Tampilkan password"}
+        aria-pressed={visible}
+        tabIndex={-1}
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 transition hover:text-emerald-400"
+      >
+        {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
   );
 }
 

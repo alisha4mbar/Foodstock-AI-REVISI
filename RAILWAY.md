@@ -58,3 +58,15 @@ Lalu menu Model AI -> Jalankan Ulang Model.
 - Build backend gagal/lama: normal, composer mengunduh Laravel (5-10 menit). Lihat tab Deployments -> Logs.
 - Login "gagal/Failed": cek LARAVEL_API_URL (https, ada /api/v1, tanpa slash di akhir) lalu redeploy frontend.
 - Perubahan SESSION_SECRET butuh redeploy frontend (nilainya dipakai saat build).
+
+## Akun per peran @foodstock.com
+
+Tambahkan di service **backend** (tab Variables):
+
+```
+FOODSTOCK_ADMIN_EMAILS=admin@foodstock.com      # (boleh ditambah email lain, pisahkan koma)
+FOODSTOCK_ROLE_PASSWORD=<password-pilihanmu-min-8>
+```
+
+Setelah redeploy: `dinas@`, `bulog@`, `distributor@foodstock.com` otomatis dibuat (password = `FOODSTOCK_ROLE_PASSWORD`).
+`admin@foodstock.com` dibuat saat login pertama (password yang kamu ketik saat itu = password admin). Jangan commit password ke GitHub.

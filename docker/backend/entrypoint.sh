@@ -8,6 +8,10 @@ if [ -z "$APP_KEY" ]; then
   echo "[foodstock] APP_KEY dibuat otomatis (isi APP_KEY di .env agar tetap sama setelah container dibuat ulang)."
 fi
 
+# Migrasi token Sanctum bawaan dibuat dengan nama bertanggal build (berubah tiap build) dan bentrok dengan
+# tabel yang sudah ada. Buang; versi bernama tetap (2026_10_12_000002_*) yang dipakai.
+rm -f database/migrations/*_create_personal_access_tokens_table.php
+
 # Tunggu MySQL siap lalu migrasi + seed master data (idempoten).
 i=0
 until php artisan migrate --force --seed; do

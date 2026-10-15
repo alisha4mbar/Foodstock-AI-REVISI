@@ -15,6 +15,7 @@ RUN composer create-project laravel/laravel:^12.0 . --no-interaction \
 
 # 2) Timpa dengan kode FoodStock (overlay)
 COPY backend-overlay/ /var/www/html/
+RUN rm -f database/migrations/*_create_personal_access_tokens_table.php
 
 COPY docker/backend/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh && chmod -R 777 storage bootstrap/cache

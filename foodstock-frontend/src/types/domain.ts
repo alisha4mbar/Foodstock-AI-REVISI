@@ -207,6 +207,8 @@ export const SessionPayloadSchema = z.object({
   nama: z.string(),
   role: RoleSchema,
   instansi: z.string(),
+  // "pending" = sudah terdaftar tetapi belum diverifikasi Admin (hanya boleh membuka /menunggu).
+  status: z.enum(["aktif", "pending"]).default("aktif"),
   iat: z.number(),
 });
 export type SessionPayload = z.infer<typeof SessionPayloadSchema>;

@@ -47,30 +47,60 @@ export async function POST(request: Request) {
 
   const { token, user } = payload.data as {
     token: string;
-    user: { id: number | string; name: string; email: string; role: string; instansi: string | null };
+    user: { id: number | string; name: string; email: string; role: string; instansi: string | null; status?: string };
   };
   const role = RoleSchema.safeParse(user.role);
+  const status = (user as { status?: string }).status === "pending" ? "pending" : "aktif";
   if (!role.success) {
     return NextResponse.json({ code: "INVALID_ROLE", message: "Role pengguna tidak dikenali.", errors: null }, { status: 500 });
   }
 
-  const session = { userId: String(user.id), nama: user.name, role: role.data, instansi: user.instansi ?? "" };
+  const session = { userId: String(user.id), nama: user.name, role: role.data, instansi: user.instansi ?? "", status: status as "aktif" | "pending" };
   const res = NextResponse.json({ ok: true, session });
   res.cookies.set(TOKEN_COOKIE_NAME, token, cookieBase);
   res.cookies.set(SESSION_COOKIE_NAME, await signSession({ ...session, iat: Date.now() }), cookieBase);
   return res;
 }
 
-// Sesi aktif dari cookie bertanda tangan: dipakai dashboard untuk menyelaraskan nama/peran
-// di TopBar/Sidebar dengan sesi server (mis. setelah storage browser dibersihkan).
+// Sesi aktif: cookie ditandatangani lalu disegarkan dari Laravel (/auth/me) supaya perubahan
+// status/peran oleh Admin (mis. akun pending -> aktif) langsung terbaca tanpa login ulang.
 export async function GET() {
   const jar = await cookies();
   const payload = await verifySession(jar.get(SESSION_COOKIE_NAME)?.value);
-  if (!payload || !jar.get(TOKEN_COOKIE_NAME)?.value) {
-    return NextResponse.json({ code: "UNAUTHENTICATED", message: "Belum masuk.", errors: null }, { status: 401 });
+  const token = jar.get(TOKEN_COOKIE_NAME)?.value;
+  const unauth = () => {
+    const r = NextResponse.json({ code: "UNAUTHENTICATED", message: "Belum masuk.", errors: null }, { status: 401 });
+    r.cookies.set(SESSION_COOKIE_NAME, "", { path: "/", maxAge: 0 });
+    r.cookies.set(TOKEN_COOKIE_NAME, "", { path: "/", maxAge: 0 });
+    return r;
+  };
+  if (!payload || !token) return unauth();
+
+  let session = { userId: payload.userId, nama: payload.nama, role: payload.role, instansi: payload.instansi, status: payload.status };
+  try {
+    const me = await fetch(`${LARAVEL_API_URL}/auth/me`, {
+      headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+    if (me.status === 401) return unauth();
+    if (me.ok) {
+      const u = (await me.json().catch(() => null))?.data as
+        | { id: number | string; name: string; role: string; instansi: string | null; status: string }
+        | undefined;
+      const role = RoleSchema.safeParse(u?.role);
+      if (u && role.success) {
+        // Akun ditolak/terkunci/nonaktif: sesi dicabut.
+        if (u.status !== "aktif" && u.status !== "pending") return unauth();
+        session = { userId: String(u.id), nama: u.name, role: role.data, instansi: u.instansi ?? "", status: u.status };
+      }
+    }
+  } catch {
+    // Backend tidak terjangkau: pakai data dari cookie.
   }
-  const { userId, nama, role, instansi } = payload;
-  return NextResponse.json({ ok: true, session: { userId, nama, role, instansi } }, { headers: { "Cache-Control": "no-store" } });
+
+  const res = NextResponse.json({ ok: true, session }, { headers: { "Cache-Control": "no-store" } });
+  res.cookies.set(SESSION_COOKIE_NAME, await signSession({ ...session, iat: Date.now() }), cookieBase);
+  return res;
 }
 
 export async function DELETE() {

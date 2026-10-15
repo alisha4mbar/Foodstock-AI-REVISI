@@ -19,7 +19,10 @@ export function SessionSync() {
         }
         const json = await res.json().catch(() => null);
         const role = RoleSchema.safeParse(json?.session?.role);
-        if (role.success) setSession({ ...json.session, role: role.data });
+        if (role.success) {
+          setSession({ ...json.session, role: role.data });
+          if (json.session.status === "pending") window.location.href = "/menunggu";
+        }
       })
       .catch(() => undefined);
     return () => {

@@ -32,9 +32,9 @@ export function useLoginMutation() {
 
       const role = RoleSchema.parse(json.session.role);
       setSession({ ...json.session, role });
-      return { role };
+      return { role, status: (json.session.status === "pending" ? "pending" : "aktif") as "aktif" | "pending" };
     },
-    onSuccess: ({ role }) => router.push(ROLE_HOME[role] ?? "/"),
+    onSuccess: ({ role, status }) => router.push(status === "pending" ? "/menunggu" : (ROLE_HOME[role] ?? "/")),
   });
 }
 

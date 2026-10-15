@@ -9,7 +9,7 @@ const ROLE_PREFIX: Record<Role, string> = {
   distributor: "/distributor",
 };
 
-const PROTECTED_PREFIXES = [...Object.values(ROLE_PREFIX), "/profil"];
+const PROTECTED_PREFIXES = [...Object.values(ROLE_PREFIX), "/profil", "/menunggu"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -17,7 +17,8 @@ export async function middleware(request: NextRequest) {
   // Pengguna yang sudah masuk tidak perlu melihat login/register lagi.
   if (pathname === "/login" || pathname === "/register") {
     const active = await verifySession(request.cookies.get(SESSION_COOKIE_NAME)?.value);
-    return active ? NextResponse.redirect(new URL(ROLE_PREFIX[active.role], request.url)) : NextResponse.next();
+    if (!active) return NextResponse.next();
+    return NextResponse.redirect(new URL(active.status === "pending" ? "/menunggu" : ROLE_PREFIX[active.role], request.url));
   }
 
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
@@ -31,6 +32,13 @@ export async function middleware(request: NextRequest) {
     loginUrl.searchParams.set("redirected", "1");
     return NextResponse.redirect(loginUrl);
   }
+
+  // Akun belum diverifikasi Admin: hanya boleh membuka halaman tunggu.
+  if (session.status === "pending") {
+    return pathname.startsWith("/menunggu") ? NextResponse.next() : NextResponse.redirect(new URL("/menunggu", request.url));
+  }
+  // Akun aktif tidak perlu halaman tunggu.
+  if (pathname.startsWith("/menunggu")) return NextResponse.redirect(new URL(ROLE_PREFIX[session.role], request.url));
 
   if (pathname.startsWith("/profil")) return NextResponse.next();
   // Admin diberi akses lintas peran khusus ke halaman impor data historis.
@@ -46,5 +54,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/admin/:path*", "/dinas/:path*", "/bulog/:path*", "/distributor/:path*", "/profil/:path*"],
+  matcher: ["/login", "/register", "/menunggu/:path*", "/admin/:path*", "/dinas/:path*", "/bulog/:path*", "/distributor/:path*", "/profil/:path*"],
 };

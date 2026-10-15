@@ -7,6 +7,7 @@ export interface ClientSession {
   nama: string;
   role: Role;
   instansi: string;
+  status?: "aktif" | "pending";
 }
 
 interface SessionState {

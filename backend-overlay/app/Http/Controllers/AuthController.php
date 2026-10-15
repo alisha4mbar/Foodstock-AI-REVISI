@@ -13,7 +13,7 @@ use Illuminate\Validation\Rules\Password;
 class AuthController extends Controller
 {
     private const BLOCKED = [
-        'pending' => ['ACCOUNT_PENDING', 'Akun Anda masih menunggu verifikasi Administrator.'],
+        // 'pending' tidak diblokir: pengguna boleh masuk ke halaman tunggu verifikasi (/menunggu).
         'ditolak' => ['ACCOUNT_REJECTED', 'Registrasi akun Anda ditolak. Hubungi Administrator.'],
         'terkunci' => ['ACCOUNT_LOCKED', 'Akun terkunci karena terlalu banyak percobaan gagal. Hubungi Administrator.'],
         'nonaktif' => ['ACCOUNT_INACTIVE', 'Akun Anda tidak aktif. Hubungi Administrator.'],

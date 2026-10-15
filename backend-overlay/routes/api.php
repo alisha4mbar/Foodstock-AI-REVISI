@@ -32,6 +32,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/auth/password', [AuthController::class, 'password']);
         Route::post('/auth/logout', [AuthController::class, 'logout']);
 
+        // Semua rute di bawah ini hanya untuk akun yang sudah diverifikasi (status aktif).
+        Route::middleware('active')->group(function () {
+
         // master data: semua role boleh membaca (FR-08)
         Route::get('/wilayah', [WilayahController::class, 'index']);
         Route::get('/wilayah/{wilayah}', [WilayahController::class, 'show']);
@@ -92,6 +95,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/settings/model', [SettingController::class, 'show']);
             Route::put('/settings/model', [SettingController::class, 'update']);
             Route::get('/audit-logs', [AuditLogController::class, 'index']);
+        });
         });
     });
 });

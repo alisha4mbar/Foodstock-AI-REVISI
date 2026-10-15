@@ -70,3 +70,8 @@ FOODSTOCK_ROLE_PASSWORD=<password-pilihanmu-min-8>
 
 Setelah redeploy: `dinas@`, `bulog@`, `distributor@foodstock.com` otomatis dibuat (password = `FOODSTOCK_ROLE_PASSWORD`).
 `admin@foodstock.com` dibuat saat login pertama (password yang kamu ketik saat itu = password admin). Jangan commit password ke GitHub.
+
+## Akun belum diverifikasi & reset pengguna
+
+- Akun yang baru registrasi (status pending) boleh login, tetapi hanya melihat halaman `/menunggu` (alert + notifikasi). Setelah Admin memverifikasi dan menetapkan peran di Kelola Pengguna, halaman itu otomatis membuka dashboard sesuai peran (dicek tiap 15 detik).
+- Migrasi `2026_10_15_000001_reset_users` menghapus semua pengguna lama satu kali saat deploy. Setelah itu: `admin@foodstock.com` dibuat saat login pertama, dan `dinas@`, `bulog@`, `distributor@foodstock.com` dibuat otomatis dari `FOODSTOCK_ROLE_PASSWORD`.
